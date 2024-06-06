@@ -7,7 +7,7 @@ A canvas game of zapping to hit a red point!
 - Pixel perfect collision detection
 
 # Play
-Play [here!](https://goalTosin.github.io/zap-plot)
+Play [here!](https://goaltosin.github.io/zap-plot)
 
 # Coming soon
 - Levels
