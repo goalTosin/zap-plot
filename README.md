@@ -3,8 +3,7 @@ A canvas game of zapping to hit a red point!
 
 # Features
 - Lasers
-- Laser Bouncing
-- Pixel perfect collision detection
+- Pixel perfect Laser Bouncing
 
 # Play
 Play [here!](https://goaltosin.github.io/zap-plot)
