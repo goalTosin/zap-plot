@@ -255,12 +255,7 @@ function str2elt(str) {
 }
 function makeElt(name, attrs, inner) {
   if (Array.isArray(attrs) || typeof attrs === "string") {
-    // console.log(attrs, inner);
-    // let oa = attrs;
-    // let oi = inner;
     [attrs, inner] = [inner, attrs];
-    // console.log(inner === oi, attrs === oa);
-    // console.log(inner === oa, attrs === oi);
   }
   return `<${name} ${
     attrs && !Array.isArray(attrs)
