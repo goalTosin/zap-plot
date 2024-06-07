@@ -268,4 +268,3 @@ function makeElt(name, attrs, inner) {
       : ""
   }>${inner ? Array.isArray(inner) ? inner.join(" ") : inner : ''}</${name}>`;
 }
-
