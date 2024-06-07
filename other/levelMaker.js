@@ -506,6 +506,7 @@ class App {
     return JSON.stringify({
       mirrors: this.mirrors.map(m => {
         delete m.toBeRotated
+        delete m.mirrorToDel
         return m
       }),
       winPoint: this.winPoint,

@@ -150,7 +150,7 @@
       i
     </div>
     <div class="side-button ok" title="Done" onclick="showDoneMenu()">👌</div>
-    <script id="first-script">
+    <script>
       function isPointInPolygon(polygon, point) {
         const x = point.x,
           y = point.y;
@@ -397,9 +397,8 @@
       </div>`);
         let back = str2elt(`<div class="back"></div>`);
         windowElt.appendChild(elt);
-        
-        document.body.insertBefore(back, document.getElementById('first-script'));
-        document.body.insertBefore(windowElt, document.getElementById('first-script'));
+        document.body.insertBefore(back, document.querySelector('script'));
+        document.body.insertBefore(windowElt, document.querySelector('script'));
       }
 
       function str2elt(str) {
