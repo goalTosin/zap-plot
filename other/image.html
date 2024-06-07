@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game asset maker</title>
+  </head>
+  <body>
+    <canvas style="border: 1px solid black;" width="35" height="35"></canvas>
+    <script>
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+      // this.ctx.save();
+      // ctx.translate(0, 0);
+      // ctx.rotate(this.player.angle + Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, -30);
+      ctx.lineTo(7, 0);
+      ctx.lineTo(-7, 0);
+      ctx.closePath();
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.font = `${30}px Arial`;
+      ctx.textAlign = "start";
+      ctx.textBaseline = "top";
+      ctx.fillText("😃", -3, 5);
+      let dataurl = canvas.toDataURL('image/webp')
+      let l = document.createElement('a')
+      l.href = dataurl
+      l.download = 'happy.webp'
+      document.body.appendChild(l)
+      l.click()
+      // ctx.restore();
+    </script>
+  </body>
+</html>
