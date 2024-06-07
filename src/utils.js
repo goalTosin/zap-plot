@@ -215,7 +215,7 @@ function lineCircIntersection(line, circle) {
   return dist < circle.r;
 }
 
-function createWindowf(elt) {
+function createWindow(elt) {
   const t = `
   <div class="window">
   <div class="top">
