@@ -147,3 +147,98 @@ function getIntersectionData(line, box) {
   }
   return intersectionDatas.length > 1 ? getRightIntersectionData() : intersectionDatas[0];
 }
+
+function lineCircIntersection(line, circle) {
+  function closestPointToLine(line, point) {
+    function getBearing(x0, y0, x1, y1) {
+      return Math.atan2(x1 - x0, y1 - y0);
+    }
+
+    function clamp(v, mi, ma) {
+      return Math.max(mi, Math.min(ma, v));
+    }
+    function dist2(x0, y0, x1, y1) {
+      const distx = x1 - x0;
+      const disty = y1 - y0;
+      const dist = Math.sqrt(distx * distx + disty * disty);
+      return dist;
+    }
+    function projectPoint(
+      line = [
+        { x: 0, y: 0 },
+        { x: 10, y: 10 },
+      ],
+      point = { x: 2, y: 1 }
+    ) {
+      const a = dist2(point.x, point.y, line[0].x, line[0].y);
+      const b = dist2(point.x, point.y, line[1].x, line[1].y);
+      const c = dist2(line[0].x, line[0].y, line[1].x, line[1].y);
+      const pow = Math.pow;
+      return (pow(a, 2) - pow(b, 2) + pow(c, 2)) / (2 * c);
+    }
+
+    function projectPointh(
+      line = [
+        { x: 0, y: 0 },
+        { x: 10, y: 10 },
+      ],
+      point = { x: 2, y: 1 }
+    ) {
+      const h = projectPoint(line, point);
+      const a = dist2(point.x, point.y, line[0].x, line[0].y);
+      const p = Math.pow;
+      return Math.sqrt(p(a, 2) - p(h, 2));
+    }
+
+    const d = clamp(
+      projectPoint(line, point),
+      0,
+      dist2(line[0].x, line[0].y, line[1].x, line[1].y)
+    );
+
+    const h = projectPointh(line, point);
+    const angle = getBearing(line[0].x, line[0].y, line[1].x, line[1].y);
+    const x = Math.sin(angle) * d + line[0].x;
+    const y = Math.cos(angle) * d + line[0].y;
+    const dist = dist2(x, y, point.x, point.y);
+    const b = getBearing(point.x, point.y, x, y);
+    const e = dist2(
+      Math.sin(b) * h + point.x,
+      Math.cos(b) * h + point.y,
+      point.x,
+      point.y
+    );
+    return dist;
+  }
+
+  const dist = closestPointToLine(line, circle);
+  return dist < circle.r;
+}
+
+function createWindowf(elt) {
+  const t = `
+  <div class="window">
+  <div class="top">
+    <h2 class="name">Window Name</h2>
+    <div class="cancel" onclick="setTimeout((() => {this.parentElement.parentElement.previousElementSibling.remove();this.parentElement.parentElement.remove()}).bind(this), 300);this.parentElement.parentElement.classList.add('deleted')">
+      <svg viewBox="-1 -1 12 12" height="1em" xmlns="http://www.w3.org/2000/svg">
+        <path
+          fill="none"
+          stroke-linecap="round"
+          stroke="black"
+          d="M0,0L10,10M10,0L0, 10" />
+      </svg>
+    </div>
+  </div>
+  <div>Some very loong content... hey yhtet sytu</div>
+</div>`;
+  let back = `<div class="back"></div>`;
+  document.body.appendChild(str2elt(back));
+  document.body.appendChild(str2elt(t));
+}
+
+function str2elt(str) {
+  const d = document.createElement('div')
+  d.innerHTML = str.trim()
+  return d.firstChild
+}
