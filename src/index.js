@@ -22,8 +22,8 @@ class App {
       sprite: new Sprite("../images/happy.webp"),
     };
     this.winPoint = {
-      x: 14 * this.tileSize + this.tileSize / 2,
-      y: 3 * this.tileSize + this.tileSize / 2,
+      x: 15 * this.tileSize,
+      y: 3 * this.tileSize,
       radius: 10,
     };
     this.lasers = [new Laser()];
@@ -164,7 +164,7 @@ class App {
             { x: this.winPoint.x, y: this.winPoint.y, r: this.winPoint.radius }
           )
         ) {
-          alert("you win");
+          createWindow("You win!!!");
         }
       }
     }
@@ -234,30 +234,6 @@ class App {
     });
   }
 
-  // updateLaser() {
-  //   const speed = 5;
-
-  //   if (this.checkCollision(this.laser, this.point)) {
-  //     alert("You Win!");
-  //     this.resetGame();
-  //   }
-  //   let collisionMirror = this.checkMirrorCollision(this.laser);
-  //   if (collisionMirror) {
-  //     this.laser.points.push({
-  //       x: this.laser.x,
-  //       y: this.laser.y,
-  //       moving: false,
-  //     });
-  //     // this.laser.moving = false
-  //     this.laser.angle = this.reflectAngle(this.laser.angle, collisionMirror.angle);
-  //   }
-
-  //   if (this.checkSteelWallCollision(this.laser)) {
-  //     alert("You Lose!");
-  //     this.resetGame();
-  //   }
-  // }
-
   checkCollision(laser, point) {
     const dx = laser.x - point.x;
     const dy = laser.y - point.y;
@@ -318,7 +294,9 @@ class App {
         let mirror = this.getLaserMirrorCollision(laser.points[0]);
         if (mirror) {
           laser.points.shift();
-          laser.points[0].moving = true;
+          if (laser.points && laser.points[0]) {
+            laser.points[0].moving = true;
+          }
         }
       }
     });
@@ -336,20 +314,34 @@ class App {
       });
     }
   }
+
+  loadLevelJson(
+    json = {
+      mirrors: [{ angle: 0.3142318990843383, "x": 400, "y": 250 }],
+      winPoint: { x: 500, y: 100, radius: 10 },
+    }
+  ) {
+    this.winPoint = json.winPoint;
+    this.mirrors = json.mirrors;
+  }
 }
 
 class Laser {
   hold(startPoint = { x: 0, y: 0 }, angle = deg2Rad(-45)) {
-    this.x = startPoint.x;
-    this.y = startPoint.y;
-    this.points = [{ ...startPoint, moving: false, angle }];
-    this.laserStarted = true;
-    this.angle = angle;
-    this.speed = 5;
+    if (!this.laserStarted) {
+      this.x = startPoint.x;
+      this.y = startPoint.y;
+      this.points = [{ ...startPoint, moving: false, angle }];
+      this.laserStarted = true;
+      this.angle = angle;
+      this.speed = 5;
+    }
   }
   release() {
-    this.points[0].moving = true;
-    this.released = true;
+    if (this.laserStarted) {
+      this.points[0].moving = true;
+      this.released = true;
+    }
   }
   render(ctx) {
     if (this.laserStarted) {
