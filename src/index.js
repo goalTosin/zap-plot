@@ -23,7 +23,7 @@ class App {
     };
     this.winPoint = {
       x: 14 * this.tileSize + this.tileSize / 2,
-      y: 2 * this.tileSize + this.tileSize / 2,
+      y: 3 * this.tileSize + this.tileSize / 2,
       radius: 10,
     };
     this.lasers = [new Laser()];
@@ -33,10 +33,10 @@ class App {
       ...JSON.parse(
         '[{"x":300,"y":200,"angle":1.0471975511965976},{"x":500,"y":300,"angle":-0.7853981633974483},{"x":500,"y":350,"angle":-0.7853981633974483},{"x":0,"y":250,"angle":2.6216379752221353},{"x":600,"y":300,"angle":1.4190343904351879},{"x":0,"y":350,"angle":0.7487850303082835},{"x":150,"y":450,"angle":0.713105628539875},{"x":600,"y":500,"angle":1.6235140681879212},{"x":750,"y":500,"angle":0.4594571772192553},{"x":650,"y":550,"angle":0.25881054648883556}]'
       ),
-      { x: 14 * this.tileSize, y: 2 * this.tileSize, angle: deg2Rad(90) },
       { x: 14 * this.tileSize, y: 3 * this.tileSize, angle: deg2Rad(90) },
-      { x: 14 * this.tileSize, y: 4 * this.tileSize, angle: deg2Rad(-70) },
-      { x: 15 * this.tileSize, y: 4 * this.tileSize, angle: deg2Rad(-70) },
+      { x: 14 * this.tileSize, y: 4 * this.tileSize, angle: deg2Rad(90) },
+      { x: 14 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
+      { x: 15 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
     ];
     // this.mirrors = [
     //   { x: 300, y: 200, width: 50, height: 10, angle: deg2Rad(60) },
