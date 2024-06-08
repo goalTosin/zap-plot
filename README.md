@@ -12,5 +12,9 @@ Play [here!](https://goaltosin.github.io/zap-plot)
 - Levels
 - Mobile phone support
 
+# Levels
+You can make your own levels and import them into your game [here!](https://goaltosin.github.io/zap-plot/other/levelMaker.html)
+
+
 # Social
 As always, don't just leave, leave a star 😁😁

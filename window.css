@@ -1,0 +1,91 @@
+.window {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  background-color: rgb(0, 0, 0);
+  box-shadow: 0px 0px 6px 4px rgba(255, 255, 255, 0.445);
+  padding: 1em;
+  min-width: 20em;
+  max-width: 25em;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5em;
+  animation: window-popup 300ms;
+  transform: translateX(-50%) scale(1);
+  transition: transform 300ms cubic-bezier(0.68, -0.55, 0.21, 1);
+  /* height: 25.5em; */
+  max-height: 25.5em;
+  color: white;
+  resize: both;
+  overflow: auto;
+}
+@keyframes window-popup {
+  0% {
+    transform: translateX(-50%) scale(0);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+.back {
+  position: absolute;
+  left: 0vw;
+  top: 0vh;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.521);
+  animation: fade-in 300ms;
+  transition: opacity 300ms;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.back:has(+ .window.deleted) {
+  opacity: 0;
+}
+.window.deleted {
+  transform: translateX(-50%) scale(0);
+}
+.window > .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  
+  width: 100%;
+  min-width: 18em;
+}
+.window > .top > h2 {
+  margin-block: 0;
+  font-weight: 100;
+}
+.window > .top > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.window > .top > div > svg {
+  border-radius: 999px;
+  padding: 0.2em;
+  box-sizing: content-box;
+}
+.window > .top > div > svg:hover {
+  background-color: rgba(255, 255, 255, 0.322);
+}
+.window > .top + div {
+  overflow: auto;
+  padding-right: 1em;
+}
+.window > .top + div::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.window > .top + div::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 9999px;
+}
