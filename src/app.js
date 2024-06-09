@@ -76,10 +76,11 @@ class App {
     this.gameStartTime = Date.now();
     this.mirrorHeight = 10;
     this.mirrorWidth = 50;
-    this.init();
+    // this.init();
   }
 
   init() {
+    this.inited = true
     this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
     this.canvas.addEventListener("mousedown", this.handleLaserCreation.bind(this));
     this.canvas.addEventListener("mouseup", this.handleLaserCreation.bind(this));
