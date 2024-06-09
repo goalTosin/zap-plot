@@ -18,8 +18,10 @@ function resetGame() {
   document.getElementById('game-box').style.display = 'flex'
 }
 
-async function playLevel(levelNum) {
-  resetGame()
-  game.loadLevelJson(await (await fetch(`../levels/level${levelNum}.json`)).json());
-}
-playLevel(10)
+// async function playLevel(levelNum) {
+//   resetGame()
+//   game.loadLevelJson(await (await fetch(`../levels/level${levelNum}.json`)).json());
+// }
+// playLevel(10)
+
+resetGame()
