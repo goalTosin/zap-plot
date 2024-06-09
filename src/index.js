@@ -19,4 +19,4 @@ async function playLevel(levelNum) {
   resetGame()
   game.loadLevelJson(await (await fetch(`../levels/level${levelNum}.json`)).json());
 }
-playLevel(1)
+playLevel(10)
