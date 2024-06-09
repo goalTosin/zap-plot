@@ -1,4 +1,3 @@
-const me = makeElt
 class App {
   constructor(canvas) {
     /**

@@ -1,5 +1,3 @@
-const me = makeElt; //The available modes are:To to anything, you must be in a mode.
-
 function showInstructions() {
   const instructions = str2elt(
     me("div", {style: 'width: 18em;'}, [

@@ -277,3 +277,5 @@ function getMouseRelativeToCanvas(ex, ey, canvas) {
     y: ((ey - cbound.y) / cbound.height) * 600 + scrollY,
   };
 }
+
+const me = makeElt
