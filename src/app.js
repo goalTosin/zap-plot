@@ -14,30 +14,39 @@ class App {
     this.tilesX = Math.floor(this.width / this.tileSize);
     this.tilesY = Math.floor(this.height / this.tileSize);
     this.player = {
-      x: this.tilesX * this.tileSize / 2,
+      x: (this.tilesX * this.tileSize) / 2,
       y: this.tileSize,
       size: 30,
       angle: 0,
       locked: false,
-      sprite: new Sprite("data:image/webp;base64,UklGRpQFAABXRUJQVlA4WAoAAAAwAAAAIgAAIgAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIKAEAAA2QY9u2aVvz2bZtswK2bdu2bYU2MvtHP7Rt2z8yz9nrlSAiJgA8FRz11N88vPAUzC0SgjQAKOnafd9dOMnEuUsL/9fxiZdt3OAl2e8CnnatUrEvudnMg6HbWPEBl+BaMFVaOtH7P98UsO55OvIv9XGwH1489Y9hUE5kfQfgYEpi6zALoBm01b0/oO1AZGK0h0RQxy/Ai8xnV9CJTF5JHfRGSsdAWe4YyH+WpvvyXp7u7RNVEbLbX8+5Un18gh1fqj1gPoFqCXh0yZfm4SUA9e00LQBw7mwaxdmLf6G4VJfdlyT883P0miSrn5H476WuJVbV4Lg+tinB4mcWOJ8oaA3ndzoXPO9X3O/04Hah8Sn4n659khhg+a9HBzOfwPbq3OYzG0EAN8ETVlA4IHYCAACQDQCdASojACMAPm0ukEWkIqGXHAcwQAbEtgBca0AwU7QQYDbAeYDznedV6xr0JelA/bD0jLuVo44/n9szNLn1s3f0n7A/6vdXb9biZS/2aRYNBw7/6NcjyVaicEZ6sGYiuXkLArNbG/ysUYW30vJ+ZZg/qgAA/v5JtutaGxlzxDm6KL96f0x1/cN5bbpBXRwp+P8bTDB5M91bTboT8DftdQmXF4Afb0Fri5WWZHE6n0CXTCfq0vp2Fu0FPxhiS/zZXTRGvXU+iDdkop1odFxBfWjdezjxP/ifKg57/ErAH+TZgcbYOjdOOLh3jDwA7PkixJGcqx8PXqd2OrSldEmiv3WVXkpjV6+FRsWnMEWby+/G7cGXfW+CHZoiDdDqnXJg0bbXbcatqqYKywuqDMoa/H46//eurAAcaCLS7E0/IwH5y/1kwDyMWpojk5onOhEH+Ll3Bn5GXb4zxp+sKK2DGr2tWnFlVM3la7ZpUfeFpW1ovw7Da8u31ruvX+fP11FEd71SX2xVluiT28Pof8JMTg10Ms/+mp2KEY5L9Cw3a8Ah7T8GinpWWyH8kyZopwBWd/WiMyf7vFzv10j6UCUVKq2mA22zqE8d3jv/GQkoImVtK6INcpy911zI2c0A8Yptf+jvcCBGE2P/eGREpn4OngtPMtkZXupo9LsaOIL0QBKyl2L/kdJv68quuWXzR8xg6/+HE5/Sg7U5PbZ6/soYROC5RvdwDwHN9vjWGYQSu48Jf6bvTa5+9fQev/3zbaKTli4tFAGwwYzC1s+wKgT4SODCYUqEnsWsPBO/pgi2Jp4lyZGAp2mcZnqnFoxkc8CTDBxAAAA="),
+      sprite: new Sprite(
+        "data:image/webp;base64,UklGRpQFAABXRUJQVlA4WAoAAAAwAAAAIgAAIgAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIKAEAAA2QY9u2aVvz2bZtswK2bdu2bYU2MvtHP7Rt2z8yz9nrlSAiJgA8FRz11N88vPAUzC0SgjQAKOnafd9dOMnEuUsL/9fxiZdt3OAl2e8CnnatUrEvudnMg6HbWPEBl+BaMFVaOtH7P98UsO55OvIv9XGwH1489Y9hUE5kfQfgYEpi6zALoBm01b0/oO1AZGK0h0RQxy/Ai8xnV9CJTF5JHfRGSsdAWe4YyH+WpvvyXp7u7RNVEbLbX8+5Un18gh1fqj1gPoFqCXh0yZfm4SUA9e00LQBw7mwaxdmLf6G4VJfdlyT883P0miSrn5H476WuJVbV4Lg+tinB4mcWOJ8oaA3ndzoXPO9X3O/04Hah8Sn4n659khhg+a9HBzOfwPbq3OYzG0EAN8ETVlA4IHYCAACQDQCdASojACMAPm0ukEWkIqGXHAcwQAbEtgBca0AwU7QQYDbAeYDznedV6xr0JelA/bD0jLuVo44/n9szNLn1s3f0n7A/6vdXb9biZS/2aRYNBw7/6NcjyVaicEZ6sGYiuXkLArNbG/ysUYW30vJ+ZZg/qgAA/v5JtutaGxlzxDm6KL96f0x1/cN5bbpBXRwp+P8bTDB5M91bTboT8DftdQmXF4Afb0Fri5WWZHE6n0CXTCfq0vp2Fu0FPxhiS/zZXTRGvXU+iDdkop1odFxBfWjdezjxP/ifKg57/ErAH+TZgcbYOjdOOLh3jDwA7PkixJGcqx8PXqd2OrSldEmiv3WVXkpjV6+FRsWnMEWby+/G7cGXfW+CHZoiDdDqnXJg0bbXbcatqqYKywuqDMoa/H46//eurAAcaCLS7E0/IwH5y/1kwDyMWpojk5onOhEH+Ll3Bn5GXb4zxp+sKK2DGr2tWnFlVM3la7ZpUfeFpW1ovw7Da8u31ruvX+fP11FEd71SX2xVluiT28Pof8JMTg10Ms/+mp2KEY5L9Cw3a8Ah7T8GinpWWyH8kyZopwBWd/WiMyf7vFzv10j6UCUVKq2mA22zqE8d3jv/GQkoImVtK6INcpy911zI2c0A8Yptf+jvcCBGE2P/eGREpn4OngtPMtkZXupo9LsaOIL0QBKyl2L/kdJv68quuWXzR8xg6/+HE5/Sg7U5PbZ6/soYROC5RvdwDwHN9vjWGYQSu48Jf6bvTa5+9fQev/3zbaKTli4tFAGwwYzC1s+wKgT4SODCYUqEnsWsPBO/pgi2Jp4lyZGAp2mcZnqnFoxkc8CTDBxAAAA="
+      ),
     };
     this.winPoint = {
-      x: 15 * this.tileSize,
-      y: 3 * this.tileSize,
+      x: NaN,
+      y: NaN,
       radius: 10,
     };
+
+    // this.winPoint = {
+    //   x: 15 * this.tileSize,
+    //   y: 3 * this.tileSize,
+    //   radius: 10,
+    // };
     this.lasers = [new Laser()];
     this.laserLimit = 10;
     this.latestLaserIdx = 0;
-    this.mirrors = [
-      ...JSON.parse(
-        '[{"x":300,"y":200,"angle":1.0471975511965976},{"x":500,"y":300,"angle":-0.7853981633974483},{"x":500,"y":350,"angle":-0.7853981633974483},{"x":0,"y":250,"angle":2.6216379752221353},{"x":600,"y":300,"angle":1.4190343904351879},{"x":0,"y":350,"angle":0.7487850303082835},{"x":150,"y":450,"angle":0.713105628539875},{"x":600,"y":500,"angle":1.6235140681879212},{"x":750,"y":500,"angle":0.4594571772192553},{"x":650,"y":550,"angle":0.25881054648883556}]'
-      ),
-      { x: 14 * this.tileSize, y: 3 * this.tileSize, angle: deg2Rad(90) },
-      { x: 14 * this.tileSize, y: 4 * this.tileSize, angle: deg2Rad(90) },
-      { x: 14 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
-      { x: 15 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
-    ];
+    // this.mirrors = [
+    //   ...JSON.parse(
+    //     '[{"x":300,"y":200,"angle":1.0471975511965976},{"x":500,"y":300,"angle":-0.7853981633974483},{"x":500,"y":350,"angle":-0.7853981633974483},{"x":0,"y":250,"angle":2.6216379752221353},{"x":600,"y":300,"angle":1.4190343904351879},{"x":0,"y":350,"angle":0.7487850303082835},{"x":150,"y":450,"angle":0.713105628539875},{"x":600,"y":500,"angle":1.6235140681879212},{"x":750,"y":500,"angle":0.4594571772192553},{"x":650,"y":550,"angle":0.25881054648883556}]'
+    //   ),
+    //   { x: 14 * this.tileSize, y: 3 * this.tileSize, angle: deg2Rad(90) },
+    //   { x: 14 * this.tileSize, y: 4 * this.tileSize, angle: deg2Rad(90) },
+    //   { x: 14 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
+    //   { x: 15 * this.tileSize, y: 5 * this.tileSize, angle: deg2Rad(-70) },
+    // ];
+    this.mirrors = [];
     // this.mirrors = [
     //   { x: 300, y: 200, width: 50, height: 10, angle: deg2Rad(60) },
     //   { x: 500, y: 300, width: 50, height: 10, angle: deg2Rad(-45) },
@@ -80,7 +89,7 @@ class App {
   }
 
   init() {
-    this.inited = true
+    this.inited = true;
     this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
     this.canvas.addEventListener("mousedown", this.handleLaserCreation.bind(this));
     this.canvas.addEventListener("mouseup", this.handleLaserCreation.bind(this));
@@ -166,8 +175,8 @@ class App {
           )
         ) {
           !this.isWon && createWindow("You win!!!");
-          this.isWon = true
-          setTimeout((() => this.isWon = false).bind(this), 3000)
+          this.isWon = true;
+          setTimeout((() => (this.isWon = false)).bind(this), 3000);
         }
       }
     }
@@ -235,8 +244,6 @@ class App {
       this.ctx.restore();
     });
   }
-
-
 
   getLaserMirrorCollision(laser) {
     return this.mirrors.find((mirror) => {
@@ -397,4 +404,3 @@ class Sprite {
     }).bind(this);
   }
 }
-
