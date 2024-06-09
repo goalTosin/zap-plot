@@ -108,9 +108,8 @@ class App {
 
   handleMouseMove(event) {
     if (!this.player.locked) {
-      const rect = this.canvas.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+      // const rect = this.canvas.getBoundingClientRect();
+      const {x: mouseX, y: mouseY} = getMouseRelativeToCanvas(event.clientX, event.clientY, this.canvas)// - rect.left;
       this.player.angle = Math.atan2(mouseY - this.player.y, mouseX - this.player.x);
     }
   }
