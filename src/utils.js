@@ -270,9 +270,10 @@ function makeElt(name, attrs, inner) {
 }
 
 // function to compensate for the css centered canvas
-function getMouseRelativeToCanvas(ex, ey) {
+function getMouseRelativeToCanvas(ex, ey, canvas) {
+  const cbound = canvas.getBoundingClientRect()
   return {
-    x: ((ex - cbound.x) / cbound.width) * 1200 + scrollX,
+    x: ((ex - cbound.x) / cbound.width) * 800 + scrollX,
     y: ((ey - cbound.y) / cbound.height) * 600 + scrollY,
   };
 }
