@@ -9,7 +9,8 @@ function isPointInPolygon(polygon, point) {
     const xj = polygon[j].x,
       yj = polygon[j].y;
 
-    const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    const intersect =
+      yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
     if (intersect) inside = !inside;
   }
 
@@ -121,7 +122,11 @@ function getIntersectionData(line, box) {
       line[1].x,
       line[1].y
     );
-    if (rawCollisionPoint && rawCollisionPoint.onLine1 && rawCollisionPoint.onLine2) {
+    if (
+      rawCollisionPoint &&
+      rawCollisionPoint.onLine1 &&
+      rawCollisionPoint.onLine2
+    ) {
       intersectionData.point = { x: rawCollisionPoint.x, y: rawCollisionPoint.y };
       intersectionData.face = face;
       intersectionData.faceAngle = Math.atan2(
@@ -145,7 +150,9 @@ function getIntersectionData(line, box) {
     });
     return correctData;
   }
-  return intersectionDatas.length > 1 ? getRightIntersectionData() : intersectionDatas[0];
+  return intersectionDatas.length > 1
+    ? getRightIntersectionData()
+    : intersectionDatas[0];
 }
 
 function lineCircIntersection(line, circle) {
@@ -215,9 +222,12 @@ function lineCircIntersection(line, circle) {
   return dist < circle.r;
 }
 
-function createWindow(name = "Window Name", elt = str2elt("<div>Hey there...</div>")) {
+function createWindow(
+  name = "Window Name",
+  elt = str2elt("<div>Hey there...</div>")
+) {
   const windowElt = str2elt(`
-<div class="window">
+  <div class="window">
   <div class="top">
     <h2 class="name">${name}</h2>
     <div class="cancel" onclick="setTimeout((() => {this.parentElement.parentElement.previousElementSibling.remove();this.parentElement.parentElement.remove()}).bind(this), 300);this.parentElement.parentElement.classList.add('deleted')">
@@ -230,11 +240,12 @@ function createWindow(name = "Window Name", elt = str2elt("<div>Hey there...</di
       </svg>
     </div>
   </div>
+
 </div>`);
-  let backgroundElt = str2elt(`<div class="back"></div>`);
+  let back = str2elt(`<div class="back"></div>`);
   windowElt.appendChild(elt);
-  document.body.insertBefore(backgroundElt, document.querySelector("script"));
-  document.body.insertBefore(windowElt, document.querySelector("script"));
+  document.body.insertBefore(back, document.querySelector('script'));
+  document.body.insertBefore(windowElt, document.querySelector('script'));
 }
 
 function str2elt(str) {
@@ -244,11 +255,24 @@ function str2elt(str) {
 }
 function makeElt(name, attrs, inner) {
   if (Array.isArray(attrs) || typeof attrs === "string") {
+    // console.log(attrs, inner);
+    // let oa = attrs;
+    // let oi = inner;
     [attrs, inner] = [inner, attrs];
+    // console.log(inner === oi, attrs === oa);
+    // console.log(inner === oa, attrs === oi);
   }
   return `<${name} ${
     attrs && !Array.isArray(attrs)
-      ? Object.keys(attrs).map((k) => `${k}=${attrs[k]}`)
+      ? Object.keys(attrs).map((k) => `${k}="${attrs[k]}"`).join(' ')
       : ""
-  }>${inner ? (Array.isArray(inner) ? inner.join(" ") : inner) : ""}</${name}>`;
+  }>${inner ? Array.isArray(inner) ? inner.join(" ") : inner : ''}</${name}>`;
+}
+
+// function to compensate for the css centered canvas
+function getMouseRelativeToCanvas(ex, ey) {
+  return {
+    x: ((ex - cbound.x) / cbound.width) * 1200 + scrollX,
+    y: ((ey - cbound.y) / cbound.height) * 600 + scrollY,
+  };
 }
