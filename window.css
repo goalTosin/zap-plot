@@ -80,6 +80,7 @@
 .window > .top + div {
   overflow: auto;
   padding-right: 1em;
+  width: 18em;
 }
 .window > .top + div::-webkit-scrollbar {
   width: 5px;
