@@ -49,7 +49,7 @@ function showBotMenu() {
         me("input", { id: "diff", type: "range", name: "diff", step: 1, max: 6 }),
       ]),
       me("div", {id: 'bot-info-action'}, [
-        me("div", {class: 'window-button'}, "Generate"),
+        me("div", {class: 'window-button', onclick: 'game.winPoint = (generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y)).winPoint'}, "Generate"),
       ]),
     ])
   );
