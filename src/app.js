@@ -1,3 +1,4 @@
+const me = makeElt
 class App {
   constructor(canvas) {
     /**
@@ -91,10 +92,18 @@ class App {
   init() {
     this.inited = true;
     this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
+    this.canvas.addEventListener("touchmove", this.handleTouchMove.bind(this));
     this.canvas.addEventListener("mousedown", this.handleLaserCreation.bind(this));
+    this.canvas.addEventListener("touchstart", this.handleLaserCreation.bind(this));
     this.canvas.addEventListener("mouseup", this.handleLaserCreation.bind(this));
+    this.canvas.addEventListener("touchend", this.handleLaserCreation.bind(this));
+    this.canvas.addEventListener("touchcancel", this.handleLaserCreation.bind(this));
     // setTimeout(this.laser.release.bind(this.laser), 1000)
     requestAnimationFrame(this.update.bind(this));
+  }
+
+  handleTouchMove(e) {
+    this.handleMouseMove(e.changedTouches[0])
   }
 
   handleMouseMove(event) {
@@ -161,8 +170,12 @@ class App {
   }
 
   updateWinStatus() {
+    let delL =[]
     for (let i = 0; i < this.lasers.length; i++) {
       const laser = this.lasers[i];
+      if (!laser) {
+        continue
+      }
       if (laser.points) {
         let lastpoint = laser.points[laser.points.length - 1];
         if (
@@ -174,12 +187,14 @@ class App {
             { x: this.winPoint.x, y: this.winPoint.y, r: this.winPoint.radius }
           )
         ) {
-          !this.isWon && createWindow("You win!!!");
-          this.isWon = true;
-          setTimeout((() => (this.isWon = false)).bind(this), 3000);
+          createWindow("You win!!!", str2elt(me('div', [me('p', 'Congrats, you won!!'), me('p', 'Now, you can move to the next level...Sorry, not available')])));
+          delL.push(i)
+          // this.isWon = true;
+          // setTimeout((() => (this.isWon = false)).bind(this), 3000);
         }
       }
     }
+    this.deleteLasers(delL)
   }
   drawTiles() {
     this.ctx.strokeStyle = "white";
