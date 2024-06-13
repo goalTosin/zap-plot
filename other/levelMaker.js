@@ -1,6 +1,6 @@
 function showInstructions() {
   const instructions = str2elt(
-    me("div", {style: 'width: 18em;'}, [
+    me("div", { style: "width: 18em;" }, [
       me("p", "To make anything in the game, you need to choose an edit mode."),
       me("p", "This is the list of edit modes you can use:"),
       me("ul", [
@@ -21,6 +21,11 @@ function showInstructions() {
         me("li", "Move Winning Point: W"),
         me("li", "No mode: Escape"),
       ]),
+      me("p", "While you are building the maze, these keys will help:"),
+      me("ul", [
+        me("li", "<kbd>Ctrl</kbd> to snap angle while rotating a mirror"),
+        me("li", "<kbd>Shift</kbd> to make a straight line from the player to the cursor"),
+      ]),
     ])
   );
   createWindow("Instructions", instructions);
@@ -31,8 +36,20 @@ function showDoneMenu() {
   const doneMenu = str2elt(
     me("div", [
       me("p", "This is the level data:"),
-      me("textarea", {style: "width: 100%;height:max-content;resize:vertical;"}, game.compileLevelData()),
-      me("div", { class: 'window-button', onclick: "game.copyLevelData(); this.innerHTML = 'Copied!'; this.disabled = true; setTimeout((() => {this.innerHTML = 'Copy'; this.disabled = false}).bind(this), 2000)" }, "Copy"),
+      me(
+        "textarea",
+        { style: "width: 100%;height:max-content;resize:vertical;" },
+        game.compileLevelData()
+      ),
+      me(
+        "div",
+        {
+          class: "window-button",
+          onclick:
+            "game.copyLevelData(); this.innerHTML = 'Copied!'; this.disabled = true; setTimeout((() => {this.innerHTML = 'Copy'; this.disabled = false}).bind(this), 2000)",
+        },
+        "Copy"
+      ),
     ])
   );
   createWindow("Level Data", doneMenu);
@@ -41,13 +58,21 @@ function showDoneMenu() {
 function showBotMenu() {
   const botMenu = str2elt(
     me("div", { id: "bot-info" }, [
-      me("div", {id: 'difflev'}, [
+      me("div", { id: "difflev" }, [
         me("label", { for: "diff" }, "Difficulty Level:"),
         // easy, medium, difficult, hard, pro, legend
         me("input", { id: "diff", type: "range", name: "diff", step: 1, max: 6 }),
       ]),
-      me("div", {id: 'bot-info-action'}, [
-        me("div", {class: 'window-button', onclick: 'game.loadLevelJson(generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y))'}, "Generate"),
+      me("div", { id: "bot-info-action" }, [
+        me(
+          "div",
+          {
+            class: "window-button",
+            onclick:
+              "game.loadLevelJson(generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y))",
+          },
+          "Generate"
+        ),
       ]),
     ])
   );
@@ -56,12 +81,16 @@ function showBotMenu() {
 // showImportMenu()
 function showImportMenu() {
   const impMenu = str2elt(
-    me('div', {id: 'imp-menu'}, [
-      me("textarea", {style: "width: 100%;height:max-content;resize:vertical;", placeholder: 'Data'}, ''),
-      me('div', {class: 'window-button'}, 'Load File'),
-      me('div', {class: 'window-button'}, 'Import')
+    me("div", { id: "imp-menu" }, [
+      me(
+        "textarea",
+        { style: "width: 100%;height:max-content;resize:vertical;", placeholder: "Data" },
+        ""
+      ),
+      me("div", { class: "window-button" }, "Load File"),
+      me("div", { class: "window-button" }, "Import"),
     ])
-  )
+  );
   createWindow("Import Level Data", impMenu);
 }
 
@@ -150,9 +179,10 @@ class LevelMaker extends App {
   // }
 
   constructor(canvas) {
-    super(canvas)
-    this.keysDown = {}
-    this.init()
+    super(canvas);
+    this.keysDown = {};
+    this.mouse = {};
+    this.init();
   }
 
   mode2none() {
@@ -199,7 +229,7 @@ class LevelMaker extends App {
   }
 
   init() {
-    this.loadData()
+    this.loadData();
     addEventListener("mousemove", this.handleMouseMove.bind(this));
     addEventListener("mousedown", this.handleLaserCreation.bind(this));
     addEventListener("mouseup", this.handleLaserCreation.bind(this));
@@ -215,6 +245,8 @@ class LevelMaker extends App {
     const rect = this.canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
+    this.mouse.x = mouseX;
+    this.mouse.y = mouseY;
     if (!this.player.locked) {
       this.player.angle = Math.atan2(mouseY - this.player.y, mouseX - this.player.x);
     }
@@ -280,7 +312,6 @@ class LevelMaker extends App {
       }
       if (!this.creationMirror.toBeRotated) {
         this.creationMirror.toBeRotated = true;
-
         console.debug("clicked once");
       } else {
         console.debug("clicked twice");
@@ -299,7 +330,7 @@ class LevelMaker extends App {
       this.winPoint.x = this.futureWinPoint.x;
       this.winPoint.y = this.futureWinPoint.y;
     }
-    this.saveData()
+    this.saveData();
   }
 
   handleLaserCreation(e) {
@@ -325,6 +356,9 @@ class LevelMaker extends App {
   update() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawTiles();
+    if (this.keysDown['Shift']) {
+      this.drawPlayerToMouseLine(this.mouse.x, this.mouse.y);
+    }
     this.drawPlayer();
     this.drawPoint();
     this.drawMirrors();
@@ -333,6 +367,14 @@ class LevelMaker extends App {
     this.deleteUnecessaryLasers();
     this.updateWinStatus();
     requestAnimationFrame(this.update.bind(this));
+  }
+
+  drawPlayerToMouseLine(x, y) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.player.x, this.player.y);
+    this.ctx.lineTo(x, y);
+    this.ctx.strokeStyle = "purple";
+    this.ctx.stroke();
   }
 
   deleteUnecessaryLasers() {
@@ -353,6 +395,7 @@ class LevelMaker extends App {
   }
 
   updateWinStatus() {
+    const dell = [];
     for (let i = 0; i < this.lasers.length; i++) {
       const laser = this.lasers[i];
       if (laser.points) {
@@ -366,12 +409,14 @@ class LevelMaker extends App {
             { x: this.winPoint.x, y: this.winPoint.y, r: this.winPoint.radius }
           )
         ) {
-          !this.isWon && createWindow("You win!!!");
-          this.isWon = true
-          setTimeout((() => this.isWon = false).bind(this), 3000)
+          createWindow("You win!!!", str2elt(me("div", me("p", "Congrats, you win"))));
+          dell.push(i);
+          // this.isWon = true;
+          // setTimeout((() => (this.isWon = false)).bind(this), 3000);
         }
       }
     }
+    this.deleteLasers(dell);
   }
 
   drawTiles() {
@@ -565,15 +610,15 @@ class LevelMaker extends App {
   }
 
   loadData() {
-    let data = localStorage.getItem('zap-pot-level-maker')
+    let data = localStorage.getItem("zap-pot-level-maker");
     if (data) {
-      this.loadLevelJson(JSON.parse(data))
+      this.loadLevelJson(JSON.parse(data));
     }
   }
 
   saveData() {
-    localStorage.setItem('zap-pot-level-maker', this.compileLevelData())
-    console.debug('saved level data to the localStorage successfully')
+    localStorage.setItem("zap-pot-level-maker", this.compileLevelData());
+    console.debug("saved level data to the localStorage successfully");
   }
 }
 
@@ -584,7 +629,7 @@ const game = new LevelMaker(canvas);
 //     `{"mirrors":[{"angle":2.356194490192345,"x":400,"y":200},{"angle":2.356194490192345,"x":200,"y":200},{"angle":0.31851257326823323,"x":-150,"y":0},{"angle":0.7853981633974483,"x":200,"y":300},{"angle":2.356194490192345,"x":400,"y":300}],"winPoint":{"x":450,"y":300,"radius":10}}`
 //   )
 // );
-  // JSON.parse(
-  //   `{"mirrors":[{"angle":2.356194490192345,"x":400,"y":200},{"angle":0.7853981633974483,"x":350,"y":200},{"angle":0.7853981633974483,"x":350,"y":100},{"angle":2.356194490192345,"x":300,"y":100}],"winPoint":{"x":350,"y":600,"radius":10}}`
-  // )
+// JSON.parse(
+//   `{"mirrors":[{"angle":2.356194490192345,"x":400,"y":200},{"angle":0.7853981633974483,"x":350,"y":200},{"angle":0.7853981633974483,"x":350,"y":100},{"angle":2.356194490192345,"x":300,"y":100}],"winPoint":{"x":350,"y":600,"radius":10}}`
+// )
 // showDoneMenu()
