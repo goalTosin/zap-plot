@@ -1,6 +1,6 @@
 function showInstructions() {
   const instructions = str2elt(
-    me("div", { style: "width: 18em;" }, [
+    me("div", [
       me("p", "To make anything in the game, you need to choose an edit mode."),
       me("p", "This is the list of edit modes you can use:"),
       me("ul", [
@@ -69,7 +69,7 @@ function showBotMenu() {
           {
             class: "window-button",
             onclick:
-              "game.loadLevelJson(generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y))",
+              "game.loadLevelJson(generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y));",
           },
           "Generate"
         ),
@@ -87,12 +87,13 @@ function showImportMenu() {
         { style: "width: 100%;height:max-content;resize:vertical;", placeholder: "Data" },
         ""
       ),
+      me("div", { class: "window-button", onclick: `game.loadLevelJson(JSON.parse(this.previousElementSibling.value)); this.innerHTML = 'Loaded!'; this.disabled = true; setTimeout((() => {this.innerHTML = 'Load'; this.disabled = false}).bind(this), 2000);` }, "Import"),
       me("div", { class: "window-button" }, "Load File"),
-      me("div", { class: "window-button" }, "Import"),
     ])
   );
   createWindow("Import Level Data", impMenu);
 }
+// {"mirrors":[{"angle":2.356194490192345,"x":400,"y":200},{"angle":2.356194490192345,"x":200,"y":200},{"angle":0.31851257326823323,"x":-150,"y":0},{"angle":0.7853981633974483,"x":200,"y":300},{"angle":2.356194490192345,"x":400,"y":300},{"angle":2.356194490192345,"x":500,"y":300},{"angle":0.7853981633974483,"x":500,"y":200},{"angle":0.5280744484263598,"x":400,"y":450},{"angle":0,"x":600,"y":200},{"angle":0.9255770066340583,"x":700,"y":150},{"angle":0,"x":300,"y":150},{"angle":2.356194490192345,"x":200,"y":100},{"angle":1.9870656246518383,"x":100,"y":200},{"angle":2.659928976034932,"x":150,"y":250},{"angle":2.7032560937318353,"x":150,"y":100}],"winPoint":{"x":550,"y":350,"radius":10}}
 
 let mode = {
   play: true,
@@ -583,22 +584,6 @@ class LevelMaker extends App {
       });
     }
   }
-  compileLevelData() {
-    return JSON.stringify({
-      mirrors: this.mirrors.map((m) => {
-        delete m.toBeRotated;
-        delete m.mirrorToDel;
-        return m;
-      }),
-      winPoint: this.winPoint,
-    });
-  }
-
-  copyLevelData() {
-    navigator.clipboard.writeText(this.compileLevelData());
-    console.debug("copied!");
-  }
-
   loadLevelJson(
     json = {
       mirrors: [{ angle: 0.3142318990843383, "x": 400, "y": 250 }],
