@@ -1,42 +1,15 @@
 class App {
   constructor(canvas) {
-    /**
-     * @type {HTMLCanvasElement} canvas
-     */
-    this.canvas = canvas;
-    /**
-     * @type {CanvasRenderingContext2D} canvas
-     */
-    this.ctx = this.canvas.getContext("2d");
-    this.width = canvas.width;
-    this.height = canvas.height;
-    this.tileSize = 50;
-    this.tilesX = Math.floor(this.width / this.tileSize);
-    this.tilesY = Math.floor(this.height / this.tileSize);
-    this.player = {
-      x: (this.tilesX * this.tileSize) / 2,
-      y: this.tileSize,
-      size: 30,
-      angle: 0,
-      locked: false,
-      sprite: new Sprite(
-        "data:image/webp;base64,UklGRpQFAABXRUJQVlA4WAoAAAAwAAAAIgAAIgAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZBTFBIKAEAAA2QY9u2aVvz2bZtswK2bdu2bYU2MvtHP7Rt2z8yz9nrlSAiJgA8FRz11N88vPAUzC0SgjQAKOnafd9dOMnEuUsL/9fxiZdt3OAl2e8CnnatUrEvudnMg6HbWPEBl+BaMFVaOtH7P98UsO55OvIv9XGwH1489Y9hUE5kfQfgYEpi6zALoBm01b0/oO1AZGK0h0RQxy/Ai8xnV9CJTF5JHfRGSsdAWe4YyH+WpvvyXp7u7RNVEbLbX8+5Un18gh1fqj1gPoFqCXh0yZfm4SUA9e00LQBw7mwaxdmLf6G4VJfdlyT883P0miSrn5H476WuJVbV4Lg+tinB4mcWOJ8oaA3ndzoXPO9X3O/04Hah8Sn4n659khhg+a9HBzOfwPbq3OYzG0EAN8ETVlA4IHYCAACQDQCdASojACMAPm0ukEWkIqGXHAcwQAbEtgBca0AwU7QQYDbAeYDznedV6xr0JelA/bD0jLuVo44/n9szNLn1s3f0n7A/6vdXb9biZS/2aRYNBw7/6NcjyVaicEZ6sGYiuXkLArNbG/ysUYW30vJ+ZZg/qgAA/v5JtutaGxlzxDm6KL96f0x1/cN5bbpBXRwp+P8bTDB5M91bTboT8DftdQmXF4Afb0Fri5WWZHE6n0CXTCfq0vp2Fu0FPxhiS/zZXTRGvXU+iDdkop1odFxBfWjdezjxP/ifKg57/ErAH+TZgcbYOjdOOLh3jDwA7PkixJGcqx8PXqd2OrSldEmiv3WVXkpjV6+FRsWnMEWby+/G7cGXfW+CHZoiDdDqnXJg0bbXbcatqqYKywuqDMoa/H46//eurAAcaCLS7E0/IwH5y/1kwDyMWpojk5onOhEH+Ll3Bn5GXb4zxp+sKK2DGr2tWnFlVM3la7ZpUfeFpW1ovw7Da8u31ruvX+fP11FEd71SX2xVluiT28Pof8JMTg10Ms/+mp2KEY5L9Cw3a8Ah7T8GinpWWyH8kyZopwBWd/WiMyf7vFzv10j6UCUVKq2mA22zqE8d3jv/GQkoImVtK6INcpy911zI2c0A8Yptf+jvcCBGE2P/eGREpn4OngtPMtkZXupo9LsaOIL0QBKyl2L/kdJv68quuWXzR8xg6/+HE5/Sg7U5PbZ6/soYROC5RvdwDwHN9vjWGYQSu48Jf6bvTa5+9fQev/3zbaKTli4tFAGwwYzC1s+wKgT4SODCYUqEnsWsPBO/pgi2Jp4lyZGAp2mcZnqnFoxkc8CTDBxAAAA="
-      ),
-    };
-    this.winPoint = {
-      x: NaN,
-      y: NaN,
-      radius: 10,
-    };
+    this.initCanvas(canvas);
+    this.initTiles();
+    this.initPlayer();
+    this.initWinPoint();
+    this.initLasers();
+    this.initMirrors();
+    this.gameStartTime = Date.now();
+  }
 
-    // this.winPoint = {
-    //   x: 15 * this.tileSize,
-    //   y: 3 * this.tileSize,
-    //   radius: 10,
-    // };
-    this.lasers = [new Laser()];
-    this.laserLimit = 10;
-    this.latestLaserIdx = 0;
+  initMirrors() {
     // this.mirrors = [
     //   ...JSON.parse(
     //     '[{"x":300,"y":200,"angle":1.0471975511965976},{"x":500,"y":300,"angle":-0.7853981633974483},{"x":500,"y":350,"angle":-0.7853981633974483},{"x":0,"y":250,"angle":2.6216379752221353},{"x":600,"y":300,"angle":1.4190343904351879},{"x":0,"y":350,"angle":0.7487850303082835},{"x":150,"y":450,"angle":0.713105628539875},{"x":600,"y":500,"angle":1.6235140681879212},{"x":750,"y":500,"angle":0.4594571772192553},{"x":650,"y":550,"angle":0.25881054648883556}]'
@@ -82,10 +55,60 @@ class App {
     //   //   angle: deg2Rad(Math.random() * 180),
     //   // });
     // }
-    this.gameStartTime = Date.now();
-    this.mirrorHeight = 10;
+    this.mirrorHeight = 5;
     this.mirrorWidth = 50;
-    // this.init();
+  }
+
+  initLasers() {
+    this.lasers = [new Laser()];
+    this.laserLimit = 10;
+    this.latestLaserIdx = 0;
+  }
+
+  initWinPoint() {
+    this.winPoint = {
+      x: NaN,
+      y: NaN,
+      radius: 10,
+    };
+
+    // this.winPoint = {
+    //   x: 15 * this.tileSize,
+    //   y: 3 * this.tileSize,
+    //   radius: 10,
+    // };
+  }
+
+  initPlayer() {
+    this.player = {
+      x: (this.tilesX * this.tileSize) / 2,
+      y: this.tileSize,
+      size: 30,
+      angle: 0,
+      locked: false,
+      sprite: new Sprite(
+        "data:image/png;base64,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"
+      ),
+    };
+  }
+
+  initTiles() {
+    this.tileSize = 50;
+    this.tilesX = Math.floor(this.width / this.tileSize);
+    this.tilesY = Math.floor(this.height / this.tileSize);
+  }
+
+  initCanvas() {
+    /**
+     * @type {HTMLCanvasElement} canvas
+     */
+    this.canvas = canvas;
+    /**
+     * @type {CanvasRenderingContext2D} canvas
+     */
+    this.ctx = this.canvas.getContext("2d");
+    this.width = canvas.width;
+    this.height = canvas.height;
   }
 
   init() {
@@ -102,13 +125,17 @@ class App {
   }
 
   handleTouchMove(e) {
-    this.handleMouseMove(e.changedTouches[0])
+    this.handleMouseMove(e.changedTouches[0]);
   }
 
   handleMouseMove(event) {
     if (!this.player.locked) {
       // const rect = this.canvas.getBoundingClientRect();
-      const {x: mouseX, y: mouseY} = getMouseRelativeToCanvas(event.clientX, event.clientY, this.canvas)// - rect.left;
+      const { x: mouseX, y: mouseY } = getMouseRelativeToCanvas(
+        event.clientX,
+        event.clientY,
+        this.canvas
+      ); // - rect.left;
       this.player.angle = Math.atan2(mouseY - this.player.y, mouseX - this.player.x);
     }
   }
@@ -168,11 +195,12 @@ class App {
   }
 
   updateWinStatus() {
-    let delL =[]
+    let c = false;
+    let delL = [];
     for (let i = 0; i < this.lasers.length; i++) {
       const laser = this.lasers[i];
       if (!laser) {
-        continue
+        continue;
       }
       if (laser.points) {
         let lastpoint = laser.points[laser.points.length - 1];
@@ -185,14 +213,30 @@ class App {
             { x: this.winPoint.x, y: this.winPoint.y, r: this.winPoint.radius }
           )
         ) {
-          createWindow("You win!!!", str2elt(me('div', [me('p', 'Congrats, you won!!'), me('p', 'Now, you can move to the next level...Sorry, not available')])));
-          delL.push(i)
+          c = true;
+          createWindow(
+            "You win!!!",
+            str2elt(
+              me("div", [
+                me("p", "Congrats, you won!!"),
+                me("p", "Now, you can move to the next level..."),
+              ])
+            )
+          );
+          delL.push(i);
           // this.isWon = true;
           // setTimeout((() => (this.isWon = false)).bind(this), 3000);
         }
       }
     }
-    this.deleteLasers(delL)
+    this.deleteLasers(delL);
+    if (c) {
+      console.log("played");
+      // console.log(this.level);
+      // console.log(this.level + 2);
+      // document.getElementById('game-box').style.display = 'none'
+      playLevel(this.level + 1);
+    }
   }
   drawTiles() {
     this.ctx.strokeStyle = "white";
@@ -243,7 +287,7 @@ class App {
   }
 
   drawMirrors() {
-    this.ctx.fillStyle = "silver";
+    this.ctx.fillStyle = "rgb(255, 168, 168)";
     this.mirrors.forEach((mirror) => {
       this.ctx.save();
       this.ctx.translate(mirror.x, mirror.y);
@@ -352,7 +396,7 @@ class Laser {
       this.points = [{ ...startPoint, moving: false, angle }];
       this.laserStarted = true;
       this.angle = angle;
-      this.speed = 5;
+      this.speed = 5
     }
   }
   release() {
@@ -380,6 +424,7 @@ class Laser {
    * @param {CanvasRenderingContext2D} ctx
    */
   renderLaser(ctx) {
+    if (!this.points[0]) return
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(this.points[0].x, this.points[0].y);

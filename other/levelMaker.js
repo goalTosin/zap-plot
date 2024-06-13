@@ -25,7 +25,7 @@ function showInstructions() {
   );
   createWindow("Instructions", instructions);
 }
-// showInstructions();
+showInstructions();
 
 function showDoneMenu() {
   const doneMenu = str2elt(
@@ -47,7 +47,7 @@ function showBotMenu() {
         me("input", { id: "diff", type: "range", name: "diff", step: 1, max: 6 }),
       ]),
       me("div", {id: 'bot-info-action'}, [
-        me("div", {class: 'window-button', onclick: 'game.winPoint = (generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y)).winPoint'}, "Generate"),
+        me("div", {class: 'window-button', onclick: 'game.loadLevelJson(generateLevel(game.tileSize, game.tilesX, game.tilesY, game.player.x, game.player.y))'}, "Generate"),
       ]),
     ])
   );
@@ -73,80 +73,86 @@ let mode = {
 };
 
 // createWindow('Welcome')
-class App {
+class LevelMaker extends App {
+  // constructor(canvas) {
+  //   /**
+  //    * @type {HTMLCanvasElement} canvas
+  //    */
+  //   this.canvas = canvas;
+  //   /**
+  //    * @type {CanvasRenderingContext2D} canvas
+  //    */
+  //   this.ctx = this.canvas.getContext("2d");
+  //   this.width = canvas.width;
+  //   this.height = canvas.height;
+  //   this.tileSize = 50;
+  //   this.tilesX = Math.floor(this.width / this.tileSize);
+  //   this.tilesY = Math.floor(this.height / this.tileSize);
+  //   this.player = {
+  //     x: (this.tilesX * this.tileSize) / 2,
+  //     y: this.tileSize,
+  //     size: 30,
+  //     angle: 0,
+  //     locked: false,
+  //     sprite: new Sprite("../images/happy.webp"),
+  //   };
+  //   this.winPoint = {
+  //     x: NaN,
+  //     y: NaN,
+  //     radius: 10,
+  //   };
+  //   this.lasers = [new Laser()];
+  //   this.laserLimit = 10;
+  //   this.latestLaserIdx = 0;
+  //   this.mirrors = [];
+  //   this.creationMirror = null;
+  //   this.futureWinPoint = null;
+  //   this.keysDown = {};
+  //   // this.mirrors = [
+  //   //   { x: 300, y: 200, width: 50, height: 10, angle: deg2Rad(60) },
+  //   //   { x: 500, y: 300, width: 50, height: 10, angle: deg2Rad(-45) },
+  //   //   {
+  //   //     x: Math.floor(Math.random() * this.tilesX) * this.tileSize,
+  //   //     y: Math.floor(Math.random() * this.tilesY) * this.tileSize,
+  //   //     width: 50,
+  //   //     height: 10,
+  //   //     angle: deg2Rad(-45),
+  //   //   },
+  //   // ];
+  //   // console.log(this.tilesX);
+  //   // for (let i = 0; i < this.tilesY + 1; i++) {
+  //   //   for (let j = 0; j < this.tilesX + 1; j++) {
+  //   //     if (Math.round(Math.random() * 10) !== 0) {
+  //   //       continue;
+  //   //     }
+  //   //     // const element = array[j];
+  //   //     this.mirrors.push({
+  //   //       x: j * this.tileSize,
+  //   //       y: i * this.tileSize,
+  //   //       width: 50,
+  //   //       height: 10,
+  //   //       angle: deg2Rad(Math.random() * 180),
+  //   //     });
+  //   //     // console.log('d');
+  //   //   }
+  //   //   // this.mirrors.push({
+  //   //   //   x: Math.floor(Math.random() * this.tilesX) * this.tileSize,
+  //   //   //   y: Math.floor(Math.random() * this.tilesY) * this.tileSize,
+  //   //   //   width: 50,
+  //   //   //   height: 10,
+  //   //   //   angle: deg2Rad(Math.random() * 180),
+  //   //   // });
+  //   // }
+  //   this.gameStartTime = Date.now();
+  //   this.mirrorHeight = 10;
+  //   this.mirrorWidth = 50;
+  //   this.init();
+  // }
+
   constructor(canvas) {
-    /**
-     * @type {HTMLCanvasElement} canvas
-     */
-    this.canvas = canvas;
-    /**
-     * @type {CanvasRenderingContext2D} canvas
-     */
-    this.ctx = this.canvas.getContext("2d");
-    this.width = canvas.width;
-    this.height = canvas.height;
-    this.tileSize = 50;
-    this.tilesX = Math.floor(this.width / this.tileSize);
-    this.tilesY = Math.floor(this.height / this.tileSize);
-    this.player = {
-      x: (this.tilesX * this.tileSize) / 2,
-      y: this.tileSize,
-      size: 30,
-      angle: 0,
-      locked: false,
-      sprite: new Sprite("../images/happy.webp"),
-    };
-    this.winPoint = {
-      x: NaN,
-      y: NaN,
-      radius: 10,
-    };
-    this.lasers = [new Laser()];
-    this.laserLimit = 10;
-    this.latestLaserIdx = 0;
-    this.mirrors = [];
-    this.creationMirror = null;
-    this.futureWinPoint = null;
-    this.keysDown = {};
-    // this.mirrors = [
-    //   { x: 300, y: 200, width: 50, height: 10, angle: deg2Rad(60) },
-    //   { x: 500, y: 300, width: 50, height: 10, angle: deg2Rad(-45) },
-    //   {
-    //     x: Math.floor(Math.random() * this.tilesX) * this.tileSize,
-    //     y: Math.floor(Math.random() * this.tilesY) * this.tileSize,
-    //     width: 50,
-    //     height: 10,
-    //     angle: deg2Rad(-45),
-    //   },
-    // ];
-    // console.log(this.tilesX);
-    // for (let i = 0; i < this.tilesY + 1; i++) {
-    //   for (let j = 0; j < this.tilesX + 1; j++) {
-    //     if (Math.round(Math.random() * 10) !== 0) {
-    //       continue;
-    //     }
-    //     // const element = array[j];
-    //     this.mirrors.push({
-    //       x: j * this.tileSize,
-    //       y: i * this.tileSize,
-    //       width: 50,
-    //       height: 10,
-    //       angle: deg2Rad(Math.random() * 180),
-    //     });
-    //     // console.log('d');
-    //   }
-    //   // this.mirrors.push({
-    //   //   x: Math.floor(Math.random() * this.tilesX) * this.tileSize,
-    //   //   y: Math.floor(Math.random() * this.tilesY) * this.tileSize,
-    //   //   width: 50,
-    //   //   height: 10,
-    //   //   angle: deg2Rad(Math.random() * 180),
-    //   // });
-    // }
-    this.gameStartTime = Date.now();
-    this.mirrorHeight = 10;
-    this.mirrorWidth = 50;
-    this.init();
+    super(canvas)
+    this.keysDown = {}
+    this.init()
   }
 
   mode2none() {
@@ -435,7 +441,7 @@ class App {
       this.ctx.rotate(mirror.angle);
       if (mirror.mirrorToDel) {
         this.ctx.fillStyle = "#ff0000";
-      } else this.ctx.fillStyle = "#c0c0c0" + (opacity ? opacity : "ff");
+      } else this.ctx.fillStyle = "#ffa8a8" + (opacity ? opacity : "ff");
       // console.log(this.ctx.fillStyle);
       this.ctx.fillRect(
         -this.mirrorWidth / 2,
@@ -571,82 +577,8 @@ class App {
   }
 }
 
-class Laser {
-  hold(startPoint = { x: 0, y: 0 }, angle = deg2Rad(-45)) {
-    if (!this.laserStarted) {
-      this.x = startPoint.x;
-      this.y = startPoint.y;
-      this.points = [{ ...startPoint, moving: false, angle }];
-      this.laserStarted = true;
-      this.angle = angle;
-      this.speed = 5;
-    }
-  }
-  release() {
-    if (this.laserStarted) {
-      this.points[0].moving = true;
-      this.released = true;
-    }
-  }
-  render(ctx) {
-    if (this.laserStarted) {
-      this.directLaser();
-      this.renderLaser(ctx);
-    }
-  }
-  directLaser() {
-    this.x += Math.cos(this.angle) * this.speed;
-    this.y += Math.sin(this.angle) * this.speed;
-  }
-  directPoint(p) {
-    p.x += Math.cos(p.angle) * this.speed * p.moving;
-    p.y += Math.sin(p.angle) * this.speed * p.moving;
-  }
-  /**
-   *
-   * @param {CanvasRenderingContext2D} ctx
-   */
-  renderLaser(ctx) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(this.points[0].x, this.points[0].y);
-    this.directPoint(this.points[0]);
-    for (let i = 1; i < this.points.length; i++) {
-      const p = this.points[i];
-      ctx.lineTo(p.x, p.y);
-      this.directPoint(p);
-    }
-    ctx.lineTo(this.x, this.y);
-    ctx.strokeStyle = "green";
-    ctx.lineWidth = 2;
-    ctx.lineJoin = "bevel";
-    ctx.stroke();
-    ctx.shadowColor = "green";
-    ctx.shadowBlur = 12;
-    ctx.s;
-    ctx.restore();
-  }
-  bounce(angle) {
-    this.points.push({ angle: angle, moving: false, x: this.x, y: this.y });
-    this.angle = angle;
-  }
-}
-
-class Sprite {
-  constructor(imgsrc, anonymousCrossorigin) {
-    this.img = new Image();
-    this.img.src = imgsrc;
-    if (anonymousCrossorigin == null || anonymousCrossorigin === true) {
-      this.img.crossOrigin = "anonymous";
-    }
-    this.img.onload = (() => {
-      this.loaded = true;
-    }).bind(this);
-  }
-}
-
 const canvas = document.getElementById("gameCanvas");
-const game = new App(canvas);
+const game = new LevelMaker(canvas);
 // game.loadLevelJson(
 //   JSON.parse(
 //     `{"mirrors":[{"angle":2.356194490192345,"x":400,"y":200},{"angle":2.356194490192345,"x":200,"y":200},{"angle":0.31851257326823323,"x":-150,"y":0},{"angle":0.7853981633974483,"x":200,"y":300},{"angle":2.356194490192345,"x":400,"y":300}],"winPoint":{"x":450,"y":300,"radius":10}}`
