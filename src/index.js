@@ -21,7 +21,7 @@ async function playLevel(levelNum) {
     game.loadLevelJson(await (await fetch(`/levels/level${levelNum}.json`)).json());
   } finally {
     game.loadLevelJson(
-      await (await fetch(`zap-plot/levels/level${levelNum}.json`)).json()
+      await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json()
     );
   }
   console.log(game);
