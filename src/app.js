@@ -386,6 +386,22 @@ class App {
     this.winPoint = json.winPoint;
     this.mirrors = json.mirrors;
   }
+  compileLevelData() {
+    return JSON.stringify({
+      mirrors: this.mirrors.map((m) => {
+        delete m.toBeRotated;
+        delete m.mirrorToDel;
+        return m;
+      }),
+      winPoint: this.winPoint,
+    });
+  }
+
+  copyLevelData() {
+    navigator.clipboard.writeText(this.compileLevelData());
+    console.debug("copied!");
+  }
+
 }
 
 class Laser {
