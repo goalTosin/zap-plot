@@ -8,7 +8,7 @@ Welcome to **Zap Plot** a laser maze game! An enjoyable and challenging game whe
 - **Green Laser**: Shoot a green laser from the top of the player's head.
 - **Laser Bouncing**: Lasers can bounce off mirrors to hit the target.
 - **Multiple Levels**: Play through multiple levels with increasing difficulty.
-- **Level Maker**: Create, edit, and share your own levels with our intuitive level maker. Use the built-in bot to generate new levels.
+- **Level Maker**: Create, edit, and share your own levels with our intuitive [level maker][1].
 
 ## Playing the Game
 - Open [the game][2]
@@ -19,17 +19,19 @@ Welcome to **Zap Plot** a laser maze game! An enjoyable and challenging game whe
 - Complete each level within the laser shot limit.
 
 ## Level Maker
-- Open [level-maker.html][1].
+- Open the [level-maker][1].
 - Use keys to create mirrors, points, and other elements on the game board. More instructions when you get [there][1]
 - Save your custom levels and share them with friends.
 - Use the bot feature to automatically generate game environments levels.
 
-**Note**: Only levels **1**, **2** and **10** have been developed
+**Note**: Only the first 3 levels have been developed
 
 ## Coming soon
 - More levels
 - Mobile phone support
 - Laser Limit: Each level should have a limited number of laser shots.
+- Built-in bot to generate new levels.
+- In-game tutorial
 
 ## Known bugs
 - Errors when repeatedly shooting the lasers fast
