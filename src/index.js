@@ -16,15 +16,13 @@ async function resetGame() {
 async function playLevel(levelNum) {
   await resetGame();
   game.level = levelNum;
-  console.log(levelNum);
   try {
     game.loadLevelJson(await (await fetch(`/levels/level${levelNum}.json`)).json());
-  } finally {
+  } catch (err) {
     game.loadLevelJson(
       await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json()
     );
   }
-  console.log(game);
 }
 // playLevel(10)
 
