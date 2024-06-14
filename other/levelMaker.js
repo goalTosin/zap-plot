@@ -21,7 +21,7 @@ function showInstructions() {
         me("li", "Move Winning Point: W"),
         me("li", "No mode: Escape"),
       ]),
-      me("p", "When you're done, click the 👌 button and copy the level data. Then go to the <a href=\"https://goaltosin.github.io/zap-plot\">game</a>"),
+      me("p", "When you're done, click the 👌 button and copy the level data. Then go to the <a href=\"https://goaltosin.github.io/zap-plot\">game</a> and click the plus button. Then paste the level data and press import. Then close the popup and play the just created level."),
       me("p", "While you're building the maze, these keys will help:"),
       me("ul", [
         me("li", "<kbd>Ctrl</kbd> to snap angle while rotating a mirror"),
