@@ -133,9 +133,9 @@ async function loadLevelData(levelNum) {
   //   );
   // }
   try {
-    l = await (await fetch(`/levels/level${levelNum}.json`)).json();
-  } catch (err) {
     l = await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json();
+  } catch (err) {
+    l = await (await fetch(`/levels/level${levelNum}.json`)).json();
   }
   return l;
 }
