@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zap plot Level Maker</title>
-    <link rel="stylesheet" href="../window.css">
+    <link rel="stylesheet" href="../window.css" />
+    <link rel="stylesheet" href="../side-button.css" />
     <style>
       body {
         margin: 0;
@@ -23,30 +24,6 @@
         border: 1px solid white;
       }
 
-      .side-button {
-        position: absolute;
-        width: 1.5em;
-        font-family: "Courier New", Courier, monospace;
-        aspect-ratio: 1 / 1;
-        background-color: white;
-        background-color: white;
-        box-shadow: 0px 0px 5px 3px rgba(255, 255, 255, 0.349);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 9999px;
-        transition-property: background-color, transform, box-shadow;
-        transition-duration: 50ms;
-        cursor: pointer;
-        user-select: none;
-      }
-      .side-button:hover {
-        background-color: rgb(226, 226, 226);
-      }
-      .side-button:active {
-        transform: scale(0.9, 0.9);
-        box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.349);
-      }
       .info {
         bottom: 1em;
         right: 1em;
@@ -77,25 +54,10 @@
         align-items: center;
         justify-content: flex-end;
       } */
-      .window-button {
-        padding: 0.5em 0.8em;
-        border-radius: 0.5em;
-        background-color: white;
-        color: black;
-        transition: transform 50ms;
-        user-select: none;
-        cursor: pointer;
-        width: fit-content;
-        margin: 1em 0 0 auto;
-      }
-      .window-button:active {
-        transform: scale(0.9);
-      }
-      .window-button:disabled {
-        touch-action: none;
-        /* cursor: default; */
-      }
 
+      .side-button {
+        aspect-ratio: 1 / 1;
+      }
     </style>
   </head>
   <body>
@@ -105,7 +67,9 @@
       i
     </div>
     <div class="side-button ok" title="Done" onclick="showDoneMenu()">👌</div>
-    <div class="side-button bot" title="Auto-Generate level" onclick="showBotMenu()">🤖</div>
+    <div class="side-button bot" title="Auto-Generate level" onclick="showBotMenu()">
+      🤖
+    </div>
     <div class="side-button import" title="Import" onclick="showImportMenu()">📂</div>
     <script src="../src/app.js"></script>
     <script src="../src/utils.js"></script>
