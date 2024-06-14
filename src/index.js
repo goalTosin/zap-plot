@@ -1,29 +1,181 @@
+// is there a way to read folder directory files without node.js?
 const canvas = document.getElementById("gameCanvas");
-let game;
+let game = new App(canvas);
 
-async function resetGame() {
-  game = null;
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      game = new App(canvas);
-      game.init();
-      document.getElementById("game-box").style.display = "flex";
-      res();
-    }, 0);
-  });
-}
+const levelBox = document.getElementById("levels");
+const extraLevels = (function () {
+  let saved = localStorage.getItem("local_levels");
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  return [];
+})();
+let levelsNum = -1;
 
-async function playLevel(levelNum) {
-  await resetGame();
-  game.level = levelNum;
+async function updateLevelsNum() {
+  let dir = "levels/levelCount.txt";
   try {
-    game.loadLevelJson(await (await fetch(`/levels/level${levelNum}.json`)).json());
+    levelsNum = parseInt(await (await fetch(`/` + dir)).text());
+    // console.log(levelsNum);
   } catch (err) {
-    game.loadLevelJson(
-      await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json()
-    );
+    try {
+      // console.log(levelsNum);
+      levelsNum = parseInt(await (await fetch(`/zap-plot/` + dir)).text());
+    } catch (err2) {
+      console.log(err2);
+    }
   }
 }
+
+function renderLevels() {
+  levelBox.innerHTML = "";
+  for (let i = 0; i < levelsNum + extraLevels.length; i++) {
+    levelBox.appendChild(
+      str2elt(
+        me(
+          "div",
+          {
+            class: "level",
+            "data-levelId": i,
+            onclick: `playLevel(${i + 1});levelBox.style.display = 'none'`,
+          },
+          i + 1 + ""
+        )
+      )
+    );
+  }
+  levelBox.appendChild(
+    str2elt(
+      me(
+        "div",
+        {
+          class: "level",
+          onclick: `showImportLevelMenu()`,
+        },
+        "+"
+      )
+    )
+  );
+}
+(async function () {
+  await updateLevelsNum();
+  renderLevels();
+  // playLevel(3)
+})();
+
+function showImportLevelMenu() {
+  const w = str2elt(
+    me("div", [
+      me(
+        "textarea",
+        { style: "width: 100%;height: 7em;", placeholder: "Enter the level data here" },
+        ""
+      ),
+      me("div", { class: "window-button", onclick: "importLevelData(this)" }, "Import"),
+    ])
+  );
+  createWindow("Import level", w);
+}
+
+function importLevelData(elt) {
+  let data;
+  try {
+    data = JSON.parse(elt.previousElementSibling.value);
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+  extraLevels.push(JSON.stringify(data));
+  renderLevels();
+  localStorage.setItem("local_levels", JSON.stringify(extraLevels));
+  // console.log(extraLevels);
+}
+
+function showGameBox() {
+  document.getElementById("game-box").style.display = "flex";
+  document.getElementById("go-back").style.display = "flex";
+
+}
+function hideGameBox() {
+  document.getElementById("game-box").style.display = "none";
+  document.getElementById("go-back").style.display = "none";
+}
+
+function resetGame() {
+  // game = null;
+  // return new Promise((res, rej) => {
+  // setTimeout(() => {
+  // game = new App(canvas);
+  // game.init();
+  showGameBox()
+  //     res();
+  //   }, 0);
+  // });
+}
+
+function goBack() {
+  hideGameBox()
+  levelBox.style.display = 'flex'
+}
+
+async function loadLevelData(levelNum) {
+  // console.log(levelsNum, levelNum);
+  // console.log(levelNum - levelsNum);
+  if (levelNum > levelsNum) {
+    return JSON.parse(extraLevels[levelNum - levelsNum - 1]);
+  }
+  let l;
+  // try {
+  //   game.loadLevelJson(await (await fetch(`/levels/level${levelNum}.json`)).json());
+  // } catch (err) {
+  //   game.loadLevelJson(
+  //     await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json()
+  //   );
+  // }
+  try {
+    l = await (await fetch(`/levels/level${levelNum}.json`)).json();
+  } catch (err) {
+    l = await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json();
+  }
+  return l;
+}
+
+function setGameRight() {
+  // const gameB = document.getElementById("game-box");
+  showGameBox()
+  // console.log(game.isWon);
+  game.init();
+  // console.log(game.isWon);
+  if (!game.startedGameLoop) {
+    game.startGameLoop()
+    // console.log('started game loop');
+  }
+}
+async function playLevel(levelNum) {
+  if (levelNum > levelsNum + extraLevels.length) {
+    createWindow(
+      "Finished All the levels",
+      str2elt(me("div", "Congrats, you've completed all the levels!"))
+    );
+    playLevel(levelNum - 1)
+    return true;
+  }
+  setGameRight();
+  game.level = levelNum;
+  // game.isWon = false
+  game.loadLevelJson(await loadLevelData(levelNum));
+}
+// async function playLevel(levelNum) {
+//   await resetGame();
+//   game.level = levelNum;
+//   try {
+//     game.loadLevelJson(await (await fetch(`/levels/level${levelNum}.json`)).json());
+//   } catch (err) {
+//     game.loadLevelJson(
+//       await (await fetch(`/zap-plot/levels/level${levelNum}.json`)).json()
+//     );
+//   }
+// }
 // playLevel(10)
 
 // resetGame()

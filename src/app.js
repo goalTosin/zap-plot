@@ -1,12 +1,9 @@
 class App {
   constructor(canvas) {
     this.initCanvas(canvas);
-    this.initTiles();
-    this.initPlayer();
-    this.initWinPoint();
-    this.initLasers();
-    this.initMirrors();
+    this.startedGameLoop = false;
     this.gameStartTime = Date.now();
+    this.init();
   }
 
   initMirrors() {
@@ -71,6 +68,10 @@ class App {
       y: NaN,
       radius: 10,
     };
+    // console.log('iswon', this.isWon);
+
+    this.isWon = false;
+    // console.log('iswon', this.isWon);
 
     // this.winPoint = {
     //   x: 15 * this.tileSize,
@@ -112,7 +113,12 @@ class App {
   }
 
   init() {
-    this.inited = true;
+    this.initTiles();
+    this.initPlayer();
+    this.initWinPoint();
+    this.initLasers();
+    this.initMirrors();
+
     this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
     this.canvas.addEventListener("touchmove", this.handleTouchMove.bind(this));
     this.canvas.addEventListener("mousedown", this.handleLaserCreation.bind(this));
@@ -121,6 +127,11 @@ class App {
     this.canvas.addEventListener("touchend", this.handleLaserCreation.bind(this));
     this.canvas.addEventListener("touchcancel", this.handleLaserCreation.bind(this));
     // setTimeout(this.laser.release.bind(this.laser), 1000)
+  }
+
+  startGameLoop() {
+    this.startedGameLoop = true;
+    // console.log('startedGameLoop', this.startedGameLoop);
     requestAnimationFrame(this.update.bind(this));
   }
 
@@ -195,6 +206,9 @@ class App {
   }
 
   updateWinStatus() {
+    if (this.isWon) {
+      return;
+    }
     let c = false;
     let delL = [];
     for (let i = 0; i < this.lasers.length; i++) {
@@ -214,29 +228,32 @@ class App {
           )
         ) {
           c = true;
-          createWindow(
-            "You win!!!",
-            str2elt(
-              me("div", [
-                me("p", "Congrats, you won!!"),
-                me("p", "Now, you can move to the next level..."),
-              ])
-            )
-          );
           delL.push(i);
           // this.isWon = true;
           // setTimeout((() => (this.isWon = false)).bind(this), 3000);
         }
       }
     }
-    this.deleteLasers(delL);
     if (c) {
-      console.log("played");
+      // console.log("played");
       // console.log(this.level);
       // console.log(this.level + 2);
       // document.getElementById('game-box').style.display = 'none'
-      playLevel(this.level + 1);
+      this.isWon = true;
+      let isLastLevel = playLevel(this.level + 1);
+      if (!isLastLevel) {
+        createWindow(
+          "You win!!!",
+          str2elt(
+            me("div", [
+              me("p", "Congrats, you won!!"),
+              me("p", "Now, you can move to the next level..."),
+            ])
+          )
+        );
+      }
     }
+    this.deleteLasers(delL);
   }
   drawTiles() {
     this.ctx.strokeStyle = "white";
@@ -401,7 +418,6 @@ class App {
     navigator.clipboard.writeText(this.compileLevelData());
     console.debug("copied!");
   }
-
 }
 
 class Laser {
@@ -412,7 +428,7 @@ class Laser {
       this.points = [{ ...startPoint, moving: false, angle }];
       this.laserStarted = true;
       this.angle = angle;
-      this.speed = 5
+      this.speed = 5;
     }
   }
   release() {
@@ -440,7 +456,7 @@ class Laser {
    * @param {CanvasRenderingContext2D} ctx
    */
   renderLaser(ctx) {
-    if (!this.points[0]) return
+    if (!this.points[0]) return;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(this.points[0].x, this.points[0].y);
@@ -451,13 +467,15 @@ class Laser {
       this.directPoint(p);
     }
     ctx.lineTo(this.x, this.y);
-    ctx.strokeStyle = "green";
+    ctx.strokeStyle = "#800080";
     ctx.lineWidth = 2;
     ctx.lineJoin = "bevel";
     ctx.stroke();
+    ctx.lineWidth = 5;
+
     ctx.shadowColor = "green";
-    ctx.shadowBlur = 12;
-    ctx.s;
+    ctx.shadowBlur = 120;
+    // ctx.sha;
     ctx.restore();
   }
   bounce(angle) {
