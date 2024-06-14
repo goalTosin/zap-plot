@@ -20,9 +20,9 @@ Next, you need to clone your fork to your computer so you can start making chang
     ```
     Replace `your-username` with your actual username
 1. Navigate to the project directory:
-```bash
-cd laser-maze-game
-```
+    ```bash
+    cd laser-maze-game
+    ```
 
 ## Step 3: Create a New Branch
 Before you start making changes, create a new branch. This keeps your work organized and makes it easier to manage.
@@ -46,7 +46,7 @@ Once you are happy with your changes, it’s time to commit them.
     git add .
     git commit -m "Add my feature"
     ```
-   Replace `"Add my cool feature"` with a message that describes your changes.
+   Replace `"Add my feature"` with a message that describes your changes.
 
 ## Step 6: Push Your Changes
 Now, push your changes to your forked repository on GitHub.
