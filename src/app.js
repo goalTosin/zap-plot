@@ -278,7 +278,7 @@ class App {
     this.ctx.lineTo(7, 0);
     this.ctx.lineTo(-7, 0);
     this.ctx.closePath();
-    this.ctx.fillStyle = "green";
+    this.ctx.fillStyle = "red";
     this.ctx.fill();
     if (this.player.sprite.loaded) {
       this.ctx.drawImage(
@@ -297,7 +297,7 @@ class App {
   }
 
   drawPoint() {
-    this.ctx.fillStyle = "red";
+    this.ctx.fillStyle = "green";
     this.ctx.beginPath();
     this.ctx.arc(this.winPoint.x, this.winPoint.y, this.winPoint.radius, 0, Math.PI * 2);
     this.ctx.fill();
@@ -467,15 +467,25 @@ class Laser {
       this.directPoint(p);
     }
     ctx.lineTo(this.x, this.y);
-    ctx.strokeStyle = "#800080";
-    ctx.lineWidth = 2;
-    ctx.lineJoin = "bevel";
-    ctx.stroke();
+    // ctx.strokeStyle = "transparent";
+    ctx.strokeStyle = "#ff000080";
+    ctx.lineJoin = 'bevel'
     ctx.lineWidth = 5;
+    // ctx.strokeStyle = "#800080";
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "red";
+    ctx.stroke();
 
-    ctx.shadowColor = "green";
-    ctx.shadowBlur = 120;
-    // ctx.sha;
+    // ctx.stroke();
+    // ctx.fill();
+
+    ctx.lineWidth = 1;
+    ctx.lineJoin = "bevel";
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+
     ctx.restore();
   }
   bounce(angle) {
