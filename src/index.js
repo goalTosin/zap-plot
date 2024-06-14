@@ -13,17 +13,18 @@ const extraLevels = (function () {
 let levelsNum = -1;
 
 async function updateLevelsNum() {
-  let dir = "levels/levelCount.txt";
+  // let dir = "levels/levelCount.txt";
   try {
-    levelsNum = parseInt(await (await fetch(`/` + dir)).text());
-    // console.log(levelsNum);
-  } catch (err) {
-    try {
-      // console.log(levelsNum);
-      levelsNum = parseInt(await (await fetch(`/zap-plot/` + dir)).text());
-    } catch (err2) {
-      console.log(err2);
+    let rawFile = await fetch(`/zap-plot/levels/levelCount.txt`);
+    if (rawFile.status === 404) {
+      throw new Error("Load Failed!");
+    } else {
+      levelsNum = parseInt(await rawFile.text());
+      console.log(levelsNum);  
     }
+  } catch (err) {
+    // console.log(err);
+    levelsNum = parseInt(await (await fetch(`/levels/levelCount.txt`)).text());
   }
 }
 
@@ -94,7 +95,6 @@ function importLevelData(elt) {
 function showGameBox() {
   document.getElementById("game-box").style.display = "flex";
   document.getElementById("go-back").style.display = "flex";
-
 }
 function hideGameBox() {
   document.getElementById("game-box").style.display = "none";
@@ -107,15 +107,15 @@ function resetGame() {
   // setTimeout(() => {
   // game = new App(canvas);
   // game.init();
-  showGameBox()
+  showGameBox();
   //     res();
   //   }, 0);
   // });
 }
 
 function goBack() {
-  hideGameBox()
-  levelBox.style.display = 'flex'
+  hideGameBox();
+  levelBox.style.display = "flex";
 }
 
 async function loadLevelData(levelNum) {
@@ -142,12 +142,12 @@ async function loadLevelData(levelNum) {
 
 function setGameRight() {
   // const gameB = document.getElementById("game-box");
-  showGameBox()
+  showGameBox();
   // console.log(game.isWon);
   game.init();
   // console.log(game.isWon);
   if (!game.startedGameLoop) {
-    game.startGameLoop()
+    game.startGameLoop();
     // console.log('started game loop');
   }
 }
@@ -157,7 +157,7 @@ async function playLevel(levelNum) {
       "Finished All the levels",
       str2elt(me("div", "Congrats, you've completed all the levels!"))
     );
-    playLevel(levelNum - 1)
+    playLevel(levelNum - 1);
     return true;
   }
   setGameRight();
