@@ -24,26 +24,24 @@ Welcome to **Zap Plot** a laser maze game! An enjoyable and challenging game whe
 - Save your custom levels and share them with friends.
 - Use the bot feature to automatically generate game environments levels.
 
-**Note**: Only the first 3 levels have been developed
+**Note**: Only the first 3 levels have been developed.
 
 ## Coming soon
-- More levels
-- Mobile phone support
-- Laser Limit: Each level should have a limited number of laser shots.
-- Built-in bot to generate new levels.
-- In-game tutorial
+- Game
+  * More levels
+  * Mobile phone support
+  * In-game tutorial
+  * Laser Limit: Each level should have a limited number of laser shots.
+- Level Maker:
+  * Built-in bot to generate new levels.
+  * Reflection preview: Instantly preview reflection without having to wait for the lasers after shooting them
 
 ## Known bugs
 - Errors when repeatedly shooting the lasers fast
-- Level Errors
 
 ## Contributing
-We welcome contributions from the community! If you have ideas for new features, bug fixes, or improvements, feel free to open an issue or submit a pull request.
-1. Fork the repository.
-1. Create a new branch (git checkout -b feature/your-feature).
-1. Commit your changes (git commit -am 'Add new feature').
-1. Push to the branch (git push origin feature/your-feature).
-1. Open a pull request.
+We welcome contributions from the community! If you have ideas for new features, bug fixes, or improvements, feel free to  open an issue or submit a pull request. Check the [CONTRIBUTING.md](CONTRIBUTING.md)
+
 
 ## Conslusion
 Enjoy playing and creating with the Laser Maze Game! If you like the project, don't forget to star this repository ⭐️
