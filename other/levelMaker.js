@@ -21,7 +21,8 @@ function showInstructions() {
         me("li", "Move Winning Point: W"),
         me("li", "No mode: Escape"),
       ]),
-      me("p", "While you are building the maze, these keys will help:"),
+      me("p", "When you're done, click the 👌 button and copy the level data. Then go to the <a href=\"https://goaltosin.github.io/zap-plot\">game</a>"),
+      me("p", "While you're building the maze, these keys will help:"),
       me("ul", [
         me("li", "<kbd>Ctrl</kbd> to snap angle while rotating a mirror"),
         me("li", "<kbd>Shift</kbd> to make a straight line from the player to the cursor"),
@@ -183,7 +184,8 @@ class LevelMaker extends App {
     super(canvas);
     this.keysDown = {};
     this.mouse = {};
-    this.init();
+    this.creationMirror = null;
+    this.futureWinPoint = null;
   }
 
   mode2none() {
@@ -228,9 +230,17 @@ class LevelMaker extends App {
     // console.log(e);
     // console.log(this.keysDown);
   }
+  
 
   init() {
+    this.initTiles();
+    this.initPlayer();
+    this.initWinPoint();
+    this.initLasers();
+    this.initMirrors();
     this.loadData();
+
+    this.inited = true
     addEventListener("mousemove", this.handleMouseMove.bind(this));
     addEventListener("mousedown", this.handleLaserCreation.bind(this));
     addEventListener("mouseup", this.handleLaserCreation.bind(this));
@@ -307,10 +317,7 @@ class LevelMaker extends App {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    if (mode.createMirror) {
-      if (!this.creationMirror) {
-        return;
-      }
+    if (mode.createMirror && this.creationMirror) {
       if (!this.creationMirror.toBeRotated) {
         this.creationMirror.toBeRotated = true;
         console.debug("clicked once");
