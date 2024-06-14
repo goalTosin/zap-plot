@@ -1,6 +1,6 @@
 # How to Contribute
 
-Do you want to help make Laser Maze Game even better? These steps will guide you how you can contribute:
+Do you want to help make Laser Maze Game even better? If you're new to contributing, these steps will guide you how you can contribute:
 
 ## Step 1: Fork the Repository
 First things first, you need to fork the repository. This means you’ll make your own copy of the game so you can work on it without messing up the original.
@@ -38,7 +38,7 @@ Replace my-feature with a name but make sure it describes what you are working o
 Open the project in your favorite code editor and start coding. Add new levels, improve the game mechanics, or fix bugs.
 
 ## Step 5: Commit Your Changes
-Once you are happy with your changes, it’s time to commit them.
+Once you are happy with your changes, it's time to commit them.
 
 1. In the terminal, type:
 
