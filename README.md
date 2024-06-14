@@ -21,8 +21,6 @@ Welcome to **Zap Plot** a laser maze game! An enjoyable and challenging game whe
 ## Level Maker
 - Open the [level-maker][1].
 - Use keys to create mirrors, points, and other elements on the game board. More instructions when you get [there][1]
-- Save your custom levels and share them with friends.
-- Use the bot feature to automatically generate game environments levels.
 
 **Note**: Only the first 3 levels have been developed.
 
