@@ -1,0 +1,25 @@
+.side-button {
+  position: absolute;
+  width: 1.5em;
+  font-family: "Courier New", Courier, monospace;
+  aspect-ratio: 1 / 1;
+  background-color: white;
+  color: black;
+  box-shadow: 0px 0px 5px 3px rgba(255, 255, 255, 0.349);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  transition-property: background-color, transform, box-shadow;
+  transition-duration: 50ms;
+  cursor: pointer;
+  user-select: none;
+  /* height: 1em; */
+}
+.side-button:hover {
+  background-color: rgb(226, 226, 226);
+}
+.side-button:active {
+  transform: scale(0.9, 0.9);
+  box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.349);
+}
